@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:useDefaultMargins="true">
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:text="@string/title" />
+
+        <TextView
+            android:id="@+id/grid_title"
+            style="@style/right_column_normal"
+            android:layout_row="0"
+            android:layout_column="1"
+            tools:text="@string/example_title" />
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:text="@string/released" />
+
+        <TextView
+            android:id="@+id/grid_released"
+            style="@style/right_column_normal"
+            android:layout_row="1"
+            android:layout_column="1"
+            tools:text="@string/example_release" />
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:text="@string/runtime" />
+
+        <TextView
+            android:id="@+id/grid_runtime"
+            style="@style/right_column_normal"
+            android:layout_row="2"
+            android:layout_column="1"
+            tools:text="@string/example_runtime" />
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:text="@string/director" />
+
+        <TextView
+            android:id="@+id/grid_director"
+            style="@style/right_column_normal"
+            android:layout_row="3"
+            android:layout_column="1"
+            tools:text="@string/example_director" />
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:text="@string/Genre" />
+
+        <TextView
+            android:id="@+id/grid_genre"
+            style="@style/right_column_normal"
+            android:layout_row="4"
+            android:layout_column="1"
+            tools:text="@string/example_genre" />
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="5"
+            android:layout_column="0"
+            android:text="@string/Writer" />
+
+        <TextView
+            android:id="@+id/grid_writers"
+            style="@style/right_column_normal"
+            android:layout_width="0dp"
+            android:layout_row="5"
+            android:layout_column="1"
+            tools:text="@string/example_writer" />
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="6"
+            android:layout_column="0"
+            android:text="@string/actors" />
+
+        <TextView
+            android:id="@+id/grid_actors"
+            style="@style/right_column_normal"
+            android:layout_row="6"
+            android:layout_column="1"
+            tools:text="@string/example_actors" />
+
+        <TextView
+            style="@style/left_column_bold"
+            android:layout_row="7"
+            android:layout_column="0"
+            android:text="@string/plot" />
+
+        <TextView
+            android:id="@+id/grid_plot"
+            style="@style/right_column_normal"
+            android:layout_row="7"
+            android:layout_column="1"
+            tools:text="@string/example_full_plot" />
+    </GridLayout>
+</androidx.core.widget.NestedScrollView>
