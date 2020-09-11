@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,26 +18,13 @@ import com.example.searchmoviesomdb.ui.MovieDetailFragment;
 
 import java.util.List;
 
-public class MovieRecyclerViewAdapter extends PagedListAdapter<MovieDataSet, MovieRecyclerViewAdapter.MovieViewHolder> {
+public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
 
-    private static DiffUtil.ItemCallback<MovieDataSet> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<MovieDataSet>() {
-                @Override
-                public boolean areItemsTheSame(MovieDataSet oldItem, MovieDataSet newItem) {
-                    return oldItem.imdbID == newItem.imdbID;
-                }
-
-                @Override
-                public boolean areContentsTheSame(MovieDataSet oldItem, MovieDataSet newItem) {
-                    return oldItem.equals(newItem);
-                }
-            };
     Context context;
     OnItemClickedListener mCallback;
     private List<MovieDataSet> mValues;
 
     public MovieRecyclerViewAdapter(List<MovieDataSet> items, Context context, OnItemClickedListener mCallback) {
-        super(DIFF_CALLBACK);
         this.mValues = items;
         this.context = context;
         this.mCallback = mCallback;

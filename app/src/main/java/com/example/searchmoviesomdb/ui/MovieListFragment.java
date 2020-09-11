@@ -37,7 +37,7 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
     View view;
     List<MovieDataSet> movieDataSets = new ArrayList<>();
     int currentPage = 1, totalItemsCount = 10;
-    String query = "Star Trek";
+    String query;
     private RecyclerView mMovieListRecyclerView;
     private MovieRecyclerViewAdapter mMovieAdapter;
     private ProgressBar mProgressBar;
@@ -61,23 +61,23 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
     }
 
     private void setRecyclerView() {
-        mMovieAdapter = new MovieRecyclerViewAdapter(movieDataSets, MovieListFragment.this.getActivity(), MovieListFragment.this);
         // First param is number of columns and second param is orientation i.e Vertical or Horizontal
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(getResources().getInteger(R.integer.grid_column_count), StaggeredGridLayoutManager.VERTICAL);
         mMovieListRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mMovieListRecyclerView.setLayoutManager(gridLayoutManager);
-        mMovieListRecyclerView.setAdapter(mMovieAdapter);
-//        EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener();
+
         mMovieListRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount_, RecyclerView view) {
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 currentPage = page;
-                totalItemsCount = totalItemsCount_;
                 getAllSearchResult();
             }
         });
-        getAllSearchResult();
+        mMovieListRecyclerView.setLayoutManager(gridLayoutManager);
+        mMovieAdapter = new MovieRecyclerViewAdapter(movieDataSets, MovieListFragment.this.getActivity(), MovieListFragment.this);
+        mMovieListRecyclerView.setAdapter(mMovieAdapter);
+        startSearch("Star Trek");
+        startSearch("Star Trek");
     }
 
     public void setupSearch() {
@@ -107,8 +107,10 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
 
                 mProgressBar.setVisibility(View.GONE);
                 mMovieListRecyclerView.setVisibility(View.VISIBLE);
-                if (movieDataSetList != null)
+                if (movieDataSetList != null) {
                     movieDataSets.addAll(movieDataSetList);
+                    totalItemsCount += movieDataSetList.size();
+                }
                 mMovieAdapter.setData(movieDataSets);
             }
         });
@@ -120,6 +122,8 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
                 query = query_;
                 EndlessRecyclerViewScrollListener.resetState();
                 movieDataSets.clear();
+                currentPage = 1;
+                totalItemsCount = 0;
                 getAllSearchResult();
             } else
                 Snackbar.make(view.findViewById(R.id.container),
