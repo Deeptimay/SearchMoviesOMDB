@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.searchmoviesomdb.BuildConfig;
-import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.models.MovieDataSet;
+import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.models.SearchDataSet;
 
 import java.util.List;
@@ -33,9 +33,9 @@ public class MoviesRepository {
         return moviesRepository;
     }
 
-    public LiveData<List<MovieDataSet>> getMovieList(String query) {
+    public LiveData<List<MovieDataSet>> getMovieList(String query, String pageCount) {
         MovieSearchService service = RetrofitClient.getClient().create(MovieSearchService.class);
-        Call<SearchDataSet> call = service.getMovieList(query, BuildConfig.API_KEY);
+        Call<SearchDataSet> call = service.getMovieList(query, pageCount, BuildConfig.API_KEY);
 
         call.enqueue(new Callback<SearchDataSet>() {
             @Override

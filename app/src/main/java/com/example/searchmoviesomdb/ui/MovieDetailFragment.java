@@ -16,8 +16,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.example.searchmoviesomdb.R;
 import com.example.searchmoviesomdb.Utils.CommonUtils;
-import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.models.MovieDataSet;
+import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.viewmodels.MoviesViewModel;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -47,6 +47,8 @@ public class MovieDetailFragment extends Fragment {
                     getResources().getString(R.string.network_not_available),
                     Snackbar.LENGTH_LONG).show();
         Glide.with(this).load(movieDataSet.Poster).into((ImageView) view.findViewById(R.id.main_backdrop));
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.main_collapsing);
+        collapsingToolbarLayout.setTitle(movieDataSet.Title);
     }
 
     private void getMovieDetails(String query) {
@@ -64,10 +66,6 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void inflateData(MovieDetailDataSet movieDataSetList) {
-
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.main_collapsing);
-        collapsingToolbarLayout.setTitle(movieDataSetList.Title);
-
         ((TextView) view.findViewById(R.id.grid_title)).setText(movieDataSetList.Title);
         ((TextView) view.findViewById(R.id.grid_writers)).setText(movieDataSetList.Writer);
         ((TextView) view.findViewById(R.id.grid_actors)).setText(movieDataSetList.Actors);

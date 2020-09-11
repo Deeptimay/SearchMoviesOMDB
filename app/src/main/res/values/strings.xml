@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Movie Finder</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -13,7 +13,6 @@
     <string name="search_button">Search</string>
     <string name="search_hint">Search by movie title</string>
     <string name="search_type">movie</string>
-<!--    <string name="default_poster">http://www.imdb.com/images/nopicture/medium/film.png</string>-->
     <string name="default_poster">https://www.advocate.com/sites/default/files/2019/08/13/imdb_logo_x750.jpg</string>
     <string name="snackbar_title_not_found">The movie title you entered was not found</string>
     <string name="snackbar_title_empty">Please enter a movie title</string>

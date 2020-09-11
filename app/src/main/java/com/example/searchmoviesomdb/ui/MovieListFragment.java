@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.searchmoviesomdb.R;
 import com.example.searchmoviesomdb.Utils.CommonUtils;
+import com.example.searchmoviesomdb.Utils.EndlessRecyclerViewScrollListener;
 import com.example.searchmoviesomdb.adapter.MovieRecyclerViewAdapter;
 import com.example.searchmoviesomdb.callbacks.OnItemClickedListener;
 import com.example.searchmoviesomdb.models.MovieDataSet;
@@ -35,6 +36,8 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
     MoviesViewModel moviesViewModel;
     View view;
     List<MovieDataSet> movieDataSets = new ArrayList<>();
+    int currentPage = 1, totalItemsCount = 10;
+    String query = "Star Trek";
     private RecyclerView mMovieListRecyclerView;
     private MovieRecyclerViewAdapter mMovieAdapter;
     private ProgressBar mProgressBar;
@@ -51,10 +54,10 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
         mMovieListRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_spinner);
 
+        moviesViewModel = ViewModelProviders.of(MovieListFragment.this.getActivity()).get(MoviesViewModel.class);
+
         setupSearch();
         setRecyclerView();
-        moviesViewModel = ViewModelProviders.of(MovieListFragment.this.getActivity()).get(MoviesViewModel.class);
-        getAllSearchResult("Star Trek");
     }
 
     private void setRecyclerView() {
@@ -65,10 +68,19 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
         mMovieListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mMovieListRecyclerView.setLayoutManager(gridLayoutManager);
         mMovieListRecyclerView.setAdapter(mMovieAdapter);
+//        EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener();
+        mMovieListRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount_, RecyclerView view) {
+                currentPage = page;
+                totalItemsCount = totalItemsCount_;
+                getAllSearchResult();
+            }
+        });
+        getAllSearchResult();
     }
 
     public void setupSearch() {
-
         searchView.setIconifiedByDefault(true);
         searchView.setQueryHint("Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -86,27 +98,29 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
         });
     }
 
-    private void getAllSearchResult(String query) {
-
+    private void getAllSearchResult() {
         mProgressBar.setVisibility(View.VISIBLE);
         mMovieListRecyclerView.setVisibility(View.INVISIBLE);
-        moviesViewModel.searchMovies(query).observe(getViewLifecycleOwner(), new Observer<List<MovieDataSet>>() {
+        moviesViewModel.searchMovies(query, String.valueOf(currentPage)).observe(getViewLifecycleOwner(), new Observer<List<MovieDataSet>>() {
             @Override
             public void onChanged(@Nullable List<MovieDataSet> movieDataSetList) {
-//                progressDialog.dismiss();
+
                 mProgressBar.setVisibility(View.GONE);
                 mMovieListRecyclerView.setVisibility(View.VISIBLE);
-                movieDataSets = movieDataSetList;
-                mMovieAdapter.setData(movieDataSetList);
+                if (movieDataSetList != null)
+                    movieDataSets.addAll(movieDataSetList);
+                mMovieAdapter.setData(movieDataSets);
             }
         });
     }
 
-    private void startSearch(String query) {
+    private void startSearch(String query_) {
         if (CommonUtils.isNetworkAvailable(getActivity().getApplicationContext())) {
-            CommonUtils.hideSoftKeyboard(getActivity());
-            if (!query.isEmpty()) {
-                getAllSearchResult(query);
+            if (!query_.isEmpty()) {
+                query = query_;
+                EndlessRecyclerViewScrollListener.resetState();
+                movieDataSets.clear();
+                getAllSearchResult();
             } else
                 Snackbar.make(view.findViewById(R.id.container),
                         getResources().getString(R.string.snackbar_title_empty),
@@ -120,6 +134,7 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
 
     @Override
     public void clickedItem(Bundle data) {
+        CommonUtils.hideSoftKeyboard(getActivity());
         NavHostFragment.findNavController(MovieListFragment.this).navigate(R.id.action_FirstFragment_to_SecondFragment, data);
     }
 }

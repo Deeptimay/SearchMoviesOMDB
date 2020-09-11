@@ -25,8 +25,8 @@ public class MoviesViewModel extends AndroidViewModel {
         moviesRepository = MoviesRepository.getInstance();
     }
 
-    public LiveData<List<MovieDataSet>> searchMovies(String query) {
-        return moviesRepository.getMovieList(query);
+    public LiveData<List<MovieDataSet>> searchMovies(String query, String pageCount) {
+        return moviesRepository.getMovieList(query, pageCount);
     }
 
     public LiveData<MovieDetailDataSet> getMovieDetails(String imdbId) {
