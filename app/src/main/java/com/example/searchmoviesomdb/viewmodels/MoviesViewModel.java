@@ -1,12 +1,13 @@
 package com.example.searchmoviesomdb.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.searchmoviesomdb.models.DetailsDataSet;
+import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.models.MovieDataSet;
 import com.example.searchmoviesomdb.services.MoviesRepository;
 
@@ -28,10 +29,13 @@ public class MoviesViewModel extends AndroidViewModel {
         return moviesRepository.getMovieList(query);
     }
 
-    //    public LiveData<HaloDocDataSet> getHaloDocSearchResults(String query) {
-//        return haloDocRepository.getHaloDocSearchResults(query);
-//    }
-    public LiveData<DetailsDataSet> getMovieDetails(String imdbId) {
+    public LiveData<MovieDetailDataSet> getMovieDetails(String imdbId) {
         return moviesRepository.getMovieDetails(imdbId);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        Log.d(TAG, "on cleared called");
     }
 }

@@ -12,44 +12,37 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.searchmoviesomdb.R;
+import com.example.searchmoviesomdb.callbacks.OnItemClickedListener;
 import com.example.searchmoviesomdb.models.MovieDataSet;
-import com.example.searchmoviesomdb.ui.SecondFragment;
+import com.example.searchmoviesomdb.ui.MovieDetailFragment;
 
 import java.util.List;
 
-public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.ViewHolder> {
+public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
 
     Context context;
     OnItemClickedListener mCallback;
     private List<MovieDataSet> mValues;
 
-    public MovieRecyclerViewAdapter(List<MovieDataSet> items, Context context) {
+    public MovieRecyclerViewAdapter(List<MovieDataSet> items, Context context, OnItemClickedListener mCallback) {
         this.mValues = items;
         this.context = context;
-    }
-
-    public void setOnItemClickedListener(OnItemClickedListener mCallback) {
         this.mCallback = mCallback;
     }
 
     @Override
-    public MovieRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_movie, parent, false);
-        return new MovieRecyclerViewAdapter.ViewHolder(view);
+    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_movie, parent, false);
+        return new MovieViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MovieRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final MovieViewHolder holder, final int position) {
 
         final MovieDataSet detail = mValues.get(position);
-        final String title = detail.Title;
-        final String imdbId = detail.imdbID;
-        final String director = "N/A";
-        final String year = detail.Year;
-        holder.mDirectorView.setText(director);
-        holder.mTitleView.setText(title);
-        holder.mYearView.setText(year);
+        holder.mDirectorView.setText(detail.Type);
+        holder.mTitleView.setText(detail.Title);
+        holder.mYearView.setText(detail.Year);
 
         final String imageUrl;
         if (!detail.Poster.equals("N/A")) {
@@ -66,7 +59,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
             public void onClick(View v) {
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(SecondFragment.MOVIE_DETAIL, detail);
+                bundle.putSerializable(MovieDetailFragment.MOVIE_DETAIL, detail);
                 mCallback.clickedItem(bundle);
             }
         });
@@ -81,7 +74,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
     }
 
     @Override
-    public void onViewRecycled(MovieRecyclerViewAdapter.ViewHolder holder) {
+    public void onViewRecycled(MovieViewHolder holder) {
         super.onViewRecycled(holder);
         Glide.with(holder.mThumbImageView.getContext()).clear(holder.mThumbImageView);
     }
@@ -91,28 +84,14 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
         notifyDataSetChanged();
     }
 
-    public void swapData(List<MovieDataSet> items) {
-        if (items != null) {
-            mValues = items;
-            notifyDataSetChanged();
-
-        } else {
-            mValues = null;
-        }
-    }
-
-    public interface OnItemClickedListener {
-        public void clickedItem(Bundle data);
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class MovieViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mTitleView;
         public final TextView mYearView;
         public final TextView mDirectorView;
         public final ImageView mThumbImageView;
 
-        public ViewHolder(View view) {
+        public MovieViewHolder(View view) {
             super(view);
             mView = view;
             mTitleView = (TextView) view.findViewById(R.id.movie_title);

@@ -2,7 +2,7 @@ package com.example.searchmoviesomdb.models;
 
 import java.io.Serializable;
 
-public class DetailsDataSet implements Serializable {
+public class MovieDetailDataSet implements Serializable {
     public String Title;
     public String Year;
     public String Rated;
