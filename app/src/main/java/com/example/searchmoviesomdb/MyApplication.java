@@ -1,8 +1,8 @@
 package com.example.searchmoviesomdb;
 
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
 
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     private static MyApplication singleton;
 

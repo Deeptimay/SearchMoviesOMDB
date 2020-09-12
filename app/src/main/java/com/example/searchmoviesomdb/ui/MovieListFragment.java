@@ -31,7 +31,7 @@ import java.util.List;
 
 public class MovieListFragment extends Fragment implements OnItemClickedListener {
 
-    private static final String LOG_TAG = "FirstFragment";
+    private static final String LOG_TAG = MovieListFragment.class.getCanonicalName();
     SearchView searchView;
     MoviesViewModel moviesViewModel;
     View view;
@@ -46,6 +46,7 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         initView();
+        setRetainInstance(true);
         return view;
     }
 

@@ -41,11 +41,11 @@ public class MoviesRepository {
             @Override
             public void onResponse(Call<SearchDataSet> call, Response<SearchDataSet> response) {
                 try {
-                    if (response.body() != null) {
+                    if (response.body() != null && response.body().getSearch() != null) {
                         movieDataSetMutableLiveData.setValue(response.body().getSearch());
                     }
                 } catch (Exception e) {
-                    movieDataSetMutableLiveData.setValue(null);
+//                    movieDataSetMutableLiveData.setValue(null);
                     Log.e(TAG, "Error while parsing search results", e);
                 }
             }
@@ -53,7 +53,7 @@ public class MoviesRepository {
             @Override
             public void onFailure(Call<SearchDataSet> call, Throwable t) {
                 Log.e(TAG, "Error while fetching search results", t);
-                movieDataSetMutableLiveData.setValue(null);
+//                movieDataSetMutableLiveData.setValue(null);
             }
         });
         return movieDataSetMutableLiveData;
@@ -72,14 +72,14 @@ public class MoviesRepository {
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error while parsing search results", e);
-                    detailsDataSetMutableLiveData.setValue(null);
+//                    detailsDataSetMutableLiveData.setValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<MovieDetailDataSet> call, Throwable t) {
                 Log.e(TAG, "Error while fetching search results", t);
-                detailsDataSetMutableLiveData.setValue(null);
+//                detailsDataSetMutableLiveData.setValue(null);
             }
         });
 

@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,6 +35,8 @@ public class MovieDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_second, container, false);
         initView();
+        setRetainInstance(true);
+        setupToolbar();
         return view;
     }
 
@@ -74,5 +78,19 @@ public class MovieDetailFragment extends Fragment {
         ((TextView) view.findViewById(R.id.grid_released)).setText(movieDataSetList.Released);
         ((TextView) view.findViewById(R.id.grid_plot)).setText(movieDataSetList.Plot);
         ((TextView) view.findViewById(R.id.grid_runtime)).setText(movieDataSetList.Runtime);
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 }
