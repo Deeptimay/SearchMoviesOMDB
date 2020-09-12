@@ -1,6 +1,7 @@
 package com.example.searchmoviesomdb.models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class MovieDataSet implements Serializable {
     public String Title;
@@ -18,6 +19,23 @@ public class MovieDataSet implements Serializable {
                 ", Type='" + Type + '\'' +
                 ", Poster='" + Poster + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MovieDataSet)) return false;
+        MovieDataSet that = (MovieDataSet) o;
+        return Objects.equals(getTitle(), that.getTitle()) &&
+                Objects.equals(getYear(), that.getYear()) &&
+                Objects.equals(getImdbID(), that.getImdbID()) &&
+                Objects.equals(getType(), that.getType()) &&
+                Objects.equals(getPoster(), that.getPoster());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitle(), getYear(), getImdbID(), getType(), getPoster());
     }
 
     public String getTitle() {

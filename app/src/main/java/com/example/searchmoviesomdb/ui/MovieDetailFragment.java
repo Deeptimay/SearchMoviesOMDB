@@ -18,9 +18,12 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.example.searchmoviesomdb.R;
 import com.example.searchmoviesomdb.Utils.CommonUtils;
+import com.example.searchmoviesomdb.Utils.Injection;
 import com.example.searchmoviesomdb.models.MovieDataSet;
 import com.example.searchmoviesomdb.models.MovieDetailDataSet;
+import com.example.searchmoviesomdb.viewmodels.MovieDetailsViewModel;
 import com.example.searchmoviesomdb.viewmodels.MoviesViewModel;
+import com.example.searchmoviesomdb.viewmodels.ViewModelFactory;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -31,28 +34,42 @@ public class MovieDetailFragment extends Fragment {
     ProgressDialog progressDialog;
     View view;
 
+    private MovieDetailsViewModel mViewModel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_second, container, false);
         initView();
-        setRetainInstance(true);
         setupToolbar();
         return view;
     }
 
     private void initView() {
-        moviesViewModel = ViewModelProviders.of(MovieDetailFragment.this.getActivity()).get(MoviesViewModel.class);
 
         MovieDataSet movieDataSet = (MovieDataSet) getArguments().getSerializable(MOVIE_DETAIL);
-        if (CommonUtils.isNetworkAvailable(getActivity().getApplicationContext()))
-            getMovieDetails(movieDataSet.imdbID);
-        else
+
+        if (CommonUtils.isNetworkAvailable(getActivity().getApplicationContext())) {
+            mViewModel = obtainViewModel();
+            mViewModel.init(movieDataSet.imdbID);
+
+            mViewModel.getResult().observe(getViewLifecycleOwner(), new Observer<MovieDetailDataSet>() {
+                @Override
+                public void onChanged(MovieDetailDataSet resource) {
+                    inflateData(resource);
+                }
+            });
+        } else
             Snackbar.make(view.findViewById(R.id.container),
                     getResources().getString(R.string.network_not_available),
                     Snackbar.LENGTH_LONG).show();
         Glide.with(this).load(movieDataSet.Poster).into((ImageView) view.findViewById(R.id.main_backdrop));
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle(movieDataSet.Title);
+    }
+
+    private MovieDetailsViewModel obtainViewModel() {
+        ViewModelFactory factory = Injection.provideViewModelFactory(MovieDetailFragment.this.getActivity());
+        return ViewModelProviders.of(this, factory).get(MovieDetailsViewModel.class);
     }
 
     private void getMovieDetails(String query) {

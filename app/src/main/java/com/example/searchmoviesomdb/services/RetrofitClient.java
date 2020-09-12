@@ -11,40 +11,38 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static final String API_URL = "http://www.omdbapi.com";
+    private static final Object sLock = new Object();
+    private static final OkHttpClient client;
     static int cacheSize = 10 * 1024 * 1024; // 10 MB
     static Cache cache = new Cache(MyApplication.getInstance().getCacheDir(), cacheSize);
-    private static Retrofit retrofit = null;
+    private static MovieSearchService sInstance;
 
-    public static Retrofit getClient() {
-        if (retrofit != null)
-            return retrofit;
+    static {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        client = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .addInterceptor(new AuthInterceptor())
+                .cache(cache)
+                .build();
+    }
 
-//        httpClient.addInterceptor(new Interceptor() {
-//            @Override
-//            public okhttp3.Response intercept(Chain chain) throws IOException {
-//                Request request = chain.request().newBuilder()
-//                        .addHeader("id", Utils.getUserId(Application.getContext()))
-//                        .addHeader("token", Utils.getToken(Application.getContext()))
-//                        .build();
-//                return chain.proceed(request);
-//            }
-//        });
+    public static MovieSearchService getInstance() {
+        synchronized (sLock) {
+            if (sInstance == null) {
+                sInstance = getRetrofitInstance().create(MovieSearchService.class);
+            }
+            return sInstance;
+        }
+    }
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        httpClient.addInterceptor(interceptor);
+    public static Retrofit getRetrofitInstance() {
 
-        OkHttpClient okHttpClient = httpClient.cache(cache).build();
-
-        retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
+                .client(client)
                 .build();
-
-        return retrofit;
     }
 }

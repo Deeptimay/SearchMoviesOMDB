@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.models.MovieDataSet;
-import com.example.searchmoviesomdb.services.MoviesRepository;
+import com.example.searchmoviesomdb.data.MoviesRepository;
 
 import java.util.List;
 

@@ -1,14 +1,15 @@
-package com.example.searchmoviesomdb.services;
+package com.example.searchmoviesomdb.data;
 
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.searchmoviesomdb.BuildConfig;
 import com.example.searchmoviesomdb.models.MovieDataSet;
 import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.models.SearchDataSet;
+import com.example.searchmoviesomdb.services.MovieSearchService;
+import com.example.searchmoviesomdb.services.RetrofitClient;
 
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class MoviesRepository {
     }
 
     public LiveData<List<MovieDataSet>> getMovieList(String query, String pageCount) {
-        MovieSearchService service = RetrofitClient.getClient().create(MovieSearchService.class);
-        Call<SearchDataSet> call = service.getMovieList(query, pageCount, BuildConfig.API_KEY);
+        MovieSearchService service = RetrofitClient.getInstance();
+        Call<SearchDataSet> call = service.getMovieList(query, pageCount);
 
         call.enqueue(new Callback<SearchDataSet>() {
             @Override
@@ -45,7 +46,6 @@ public class MoviesRepository {
                         movieDataSetMutableLiveData.setValue(response.body().getSearch());
                     }
                 } catch (Exception e) {
-//                    movieDataSetMutableLiveData.setValue(null);
                     Log.e(TAG, "Error while parsing search results", e);
                 }
             }
@@ -53,15 +53,14 @@ public class MoviesRepository {
             @Override
             public void onFailure(Call<SearchDataSet> call, Throwable t) {
                 Log.e(TAG, "Error while fetching search results", t);
-//                movieDataSetMutableLiveData.setValue(null);
             }
         });
         return movieDataSetMutableLiveData;
     }
 
     public LiveData<MovieDetailDataSet> getMovieDetails(String imdbId) {
-        MovieSearchService service = RetrofitClient.getClient().create(MovieSearchService.class);
-        Call<MovieDetailDataSet> call = service.getMovieDetails(imdbId, BuildConfig.API_KEY);
+        MovieSearchService service = RetrofitClient.getInstance();
+        Call<MovieDetailDataSet> call = service.getMovieDetails(imdbId);
 
         call.enqueue(new Callback<MovieDetailDataSet>() {
             @Override
@@ -72,14 +71,12 @@ public class MoviesRepository {
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error while parsing search results", e);
-//                    detailsDataSetMutableLiveData.setValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<MovieDetailDataSet> call, Throwable t) {
                 Log.e(TAG, "Error while fetching search results", t);
-//                detailsDataSetMutableLiveData.setValue(null);
             }
         });
 
