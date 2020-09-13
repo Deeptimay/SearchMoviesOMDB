@@ -1,11 +1,3 @@
-/**
- * Filename: MainActivity.java
- * Author: Matthew Huie
- * <p>
- * MainActivity represents the initial view of the app.  This Activity has a single ImageView which
- * is used to transition the user to the next Activity.
- */
-
 package com.example.searchmoviesomdb.ui;
 
 import android.app.Activity;
