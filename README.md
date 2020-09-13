@@ -5,6 +5,7 @@ Databinding LiveData
 MVVM
 Retrofit
 AndroidX
+Google Analytics
 
 Test Apk Link: https://drive.google.com/file/d/1-e1bnptGgUOkSv7pvAbabCJha7oxiO7d/view?usp=sharing
 
