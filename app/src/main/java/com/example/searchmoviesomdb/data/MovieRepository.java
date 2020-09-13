@@ -1,16 +1,10 @@
 package com.example.searchmoviesomdb.data;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.example.searchmoviesomdb.Utils.AppExecutors;
-import com.example.searchmoviesomdb.models.MovieDataSet;
 import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.models.RepoMoviesResult;
-
-import java.util.List;
-
 
 /**
  * Repository implementation that returns a paginated data and loads data directly from network.
@@ -43,11 +37,11 @@ public class MovieRepository implements DataSource {
 
     @Override
     public LiveData<MovieDetailDataSet> loadMovie(String movieId) {
-        return  mRemoteDataSource.loadMovie(movieId);
+        return mRemoteDataSource.loadMovie(movieId);
     }
 
     @Override
     public RepoMoviesResult getAllFavoriteMovies(String key) {
-        return  mRemoteDataSource.loadMoviesFilteredBy(key);
+        return mRemoteDataSource.loadMoviesFilteredBy(key);
     }
 }

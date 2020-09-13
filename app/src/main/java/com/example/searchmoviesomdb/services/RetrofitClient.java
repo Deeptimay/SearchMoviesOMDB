@@ -22,8 +22,8 @@ public class RetrofitClient {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
                 .addInterceptor(new AuthInterceptor())
+                .addInterceptor(logging)
                 .cache(cache)
                 .build();
     }
@@ -38,7 +38,6 @@ public class RetrofitClient {
     }
 
     public static Retrofit getRetrofitInstance() {
-
         return new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())

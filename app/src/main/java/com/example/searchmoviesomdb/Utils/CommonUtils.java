@@ -6,9 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.inputmethod.InputMethodManager;
 
-/**
- * Created by santhoshvai on 23/04/16.
- */
 public class CommonUtils {
 
     /**

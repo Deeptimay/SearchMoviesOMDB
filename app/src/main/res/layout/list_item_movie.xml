@@ -60,7 +60,7 @@
                 android:paddingLeft="@dimen/card_padding_large"
                 android:paddingRight="@dimen/card_padding_large"
                 android:paddingBottom="4dp"
-                tools:text="N/A" />
+                tools:text="@{movie.type}" />
 
             <TextView
                 android:id="@+id/movie_year"

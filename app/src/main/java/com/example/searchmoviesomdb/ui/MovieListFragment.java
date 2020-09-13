@@ -25,12 +25,8 @@ import com.example.searchmoviesomdb.adapter.MovieRecyclerViewAdapter;
 import com.example.searchmoviesomdb.callbacks.OnItemClickedListener;
 import com.example.searchmoviesomdb.models.MovieDataSet;
 import com.example.searchmoviesomdb.viewmodels.DiscoverMoviesViewModel;
-import com.example.searchmoviesomdb.viewmodels.MoviesViewModel;
 import com.example.searchmoviesomdb.viewmodels.ViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MovieListFragment extends Fragment implements OnItemClickedListener {
@@ -108,24 +104,6 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
             }
         });
     }
-
-//    private void getAllSearchResult() {
-//        mProgressBar.setVisibility(View.VISIBLE);
-//        mMovieListRecyclerView.setVisibility(View.INVISIBLE);
-//        moviesViewModel.searchMovies(query, String.valueOf(currentPage)).observe(getViewLifecycleOwner(), new Observer<List<MovieDataSet>>() {
-//            @Override
-//            public void onChanged(@Nullable List<MovieDataSet> movieDataSetList) {
-//
-//                mProgressBar.setVisibility(View.GONE);
-//                mMovieListRecyclerView.setVisibility(View.VISIBLE);
-//                if (movieDataSetList != null) {
-//                    movieDataSets.addAll(movieDataSetList);
-//                    totalItemsCount += movieDataSetList.size();
-//                }
-//                mMovieAdapter.setData(movieDataSets);
-//            }
-//        });
-//    }
 
     private void startSearch(String query) {
         if (CommonUtils.isNetworkAvailable(getActivity().getApplicationContext())) {

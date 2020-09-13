@@ -1,14 +1,14 @@
 package com.example.searchmoviesomdb.ui;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -22,7 +22,6 @@ import com.example.searchmoviesomdb.Utils.Injection;
 import com.example.searchmoviesomdb.models.MovieDataSet;
 import com.example.searchmoviesomdb.models.MovieDetailDataSet;
 import com.example.searchmoviesomdb.viewmodels.MovieDetailsViewModel;
-import com.example.searchmoviesomdb.viewmodels.MoviesViewModel;
 import com.example.searchmoviesomdb.viewmodels.ViewModelFactory;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,8 +29,6 @@ import com.google.android.material.snackbar.Snackbar;
 public class MovieDetailFragment extends Fragment {
 
     public static final String MOVIE_DETAIL = "movie_detail";
-    MoviesViewModel moviesViewModel;
-    ProgressDialog progressDialog;
     View view;
 
     private MovieDetailsViewModel mViewModel;
@@ -62,7 +59,7 @@ public class MovieDetailFragment extends Fragment {
             Snackbar.make(view.findViewById(R.id.container),
                     getResources().getString(R.string.network_not_available),
                     Snackbar.LENGTH_LONG).show();
-        Glide.with(this).load(movieDataSet.Poster).into((ImageView) view.findViewById(R.id.main_backdrop));
+        Glide.with(this).load(movieDataSet.Poster).placeholder(R.drawable.ic_cinema).into((ImageView) view.findViewById(R.id.main_backdrop));
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle(movieDataSet.Title);
     }
@@ -70,20 +67,6 @@ public class MovieDetailFragment extends Fragment {
     private MovieDetailsViewModel obtainViewModel() {
         ViewModelFactory factory = Injection.provideViewModelFactory(MovieDetailFragment.this.getActivity());
         return ViewModelProviders.of(this, factory).get(MovieDetailsViewModel.class);
-    }
-
-    private void getMovieDetails(String query) {
-        progressDialog = new ProgressDialog(MovieDetailFragment.this.getActivity());
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();
-        moviesViewModel.getMovieDetails(query).observe(getViewLifecycleOwner(), new Observer<MovieDetailDataSet>() {
-            @Override
-            public void onChanged(@Nullable MovieDetailDataSet movieDataSetList) {
-                if (movieDataSetList != null)
-                    inflateData(movieDataSetList);
-                progressDialog.dismiss();
-            }
-        });
     }
 
     private void inflateData(MovieDetailDataSet movieDataSetList) {
@@ -109,5 +92,12 @@ public class MovieDetailFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
     }
 }

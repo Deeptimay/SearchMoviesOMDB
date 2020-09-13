@@ -43,7 +43,6 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
 
         // load data from API
         Call<SearchDataSet> request = movieService.getMovieList(key, String.valueOf(FIRST_PAGE));
-
         // we execute sync since this is triggered by refresh
         try {
             Response<SearchDataSet> response = request.execute();

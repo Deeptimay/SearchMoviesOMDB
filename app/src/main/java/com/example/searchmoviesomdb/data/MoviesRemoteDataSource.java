@@ -37,7 +37,7 @@ public class MoviesRemoteDataSource {
     }
 
     public LiveData<MovieDetailDataSet> loadMovie(final String movieId) {
-        return MoviesRepository.getInstance().getMovieDetails(movieId);
+        return MoviesDetailsRepository.getInstance().getMovieDetails(movieId);
     }
 
     /**
