@@ -1,6 +1,7 @@
 # SearchMoviesOMDB
 
 Jetpack Navigation PagedListAdapter
+Databinding LiveData
 MVVM
 Retrofit
 AndroidX
