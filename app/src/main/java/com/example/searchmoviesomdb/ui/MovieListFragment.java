@@ -65,6 +65,7 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
 
         setupSearch();
         setRecyclerView();
+        showLoader(true);
     }
 
     private void setRecyclerView() {
@@ -82,8 +83,7 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
             @Override
             public void onChanged(PagedList<MovieDataSet> movies) {
                 mMovieAdapter.submitList(movies);
-                mProgressBar.setVisibility(View.GONE);
-                mMovieListRecyclerView.setVisibility(View.VISIBLE);
+                showLoader(false);
             }
         });
     }
@@ -108,8 +108,7 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
 
     private void startSearch(String query) {
         if (!query.isEmpty()) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mMovieListRecyclerView.setVisibility(View.INVISIBLE);
+            showLoader(true);
             if (!viewModel.getCurrentKey().equalsIgnoreCase(query))
                 viewModel.setCurrentKey(query);
         } else
@@ -121,6 +120,16 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
             Snackbar.make(view.findViewById(R.id.container),
                     getResources().getString(R.string.network_not_available),
                     Snackbar.LENGTH_LONG).show();
+    }
+
+    private void showLoader(boolean flag) {
+        if (flag) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mMovieListRecyclerView.setVisibility(View.INVISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            mMovieListRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
