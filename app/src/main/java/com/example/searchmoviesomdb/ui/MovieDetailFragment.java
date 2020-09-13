@@ -1,5 +1,6 @@
 package com.example.searchmoviesomdb.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +31,7 @@ public class MovieDetailFragment extends Fragment {
 
     public static final String MOVIE_DETAIL = "movie_detail";
     View view;
-
+    ProgressDialog progressDialog;
     private MovieDetailsViewModel mViewModel;
 
     @Override
@@ -42,23 +43,29 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void initView() {
-
         MovieDataSet movieDataSet = (MovieDataSet) getArguments().getSerializable(MOVIE_DETAIL);
 
-        if (CommonUtils.isNetworkAvailable(getActivity().getApplicationContext())) {
-            mViewModel = obtainViewModel();
-            mViewModel.init(movieDataSet.imdbID);
+        progressDialog = new ProgressDialog(MovieDetailFragment.this.getActivity());
+        progressDialog.setMessage("Loading....");
+        progressDialog.show();
 
-            mViewModel.getResult().observe(getViewLifecycleOwner(), new Observer<MovieDetailDataSet>() {
-                @Override
-                public void onChanged(MovieDetailDataSet resource) {
-                    inflateData(resource);
-                }
-            });
-        } else
+        if (!CommonUtils.isNetworkAvailable(getActivity().getApplicationContext())) {
             Snackbar.make(view.findViewById(R.id.container),
                     getResources().getString(R.string.network_not_available),
                     Snackbar.LENGTH_LONG).show();
+            progressDialog.dismiss();
+        }
+        mViewModel = obtainViewModel();
+        mViewModel.init(movieDataSet.imdbID);
+
+        mViewModel.getResult().observe(getViewLifecycleOwner(), new Observer<MovieDetailDataSet>() {
+            @Override
+            public void onChanged(MovieDetailDataSet resource) {
+                inflateData(resource);
+                progressDialog.dismiss();
+            }
+        });
+
         Glide.with(this).load(movieDataSet.Poster).placeholder(R.drawable.ic_cinema).into((ImageView) view.findViewById(R.id.main_backdrop));
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle(movieDataSet.Title);

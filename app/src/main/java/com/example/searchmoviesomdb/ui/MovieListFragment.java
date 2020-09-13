@@ -82,9 +82,10 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
             @Override
             public void onChanged(PagedList<MovieDataSet> movies) {
                 mMovieAdapter.submitList(movies);
+                mProgressBar.setVisibility(View.GONE);
+                mMovieListRecyclerView.setVisibility(View.VISIBLE);
             }
         });
-
     }
 
     public void setupSearch() {
@@ -98,7 +99,7 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
 
             @Override
             public boolean onQueryTextChange(String query) {
-                if (query.length() > 2)
+                if (!query.isEmpty())
                     startSearch(query);
                 return true;
             }
@@ -106,18 +107,20 @@ public class MovieListFragment extends Fragment implements OnItemClickedListener
     }
 
     private void startSearch(String query) {
-        if (CommonUtils.isNetworkAvailable(getActivity().getApplicationContext())) {
-            if (!query.isEmpty()) {
+        if (!query.isEmpty()) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mMovieListRecyclerView.setVisibility(View.INVISIBLE);
+            if (!viewModel.getCurrentKey().equalsIgnoreCase(query))
                 viewModel.setCurrentKey(query);
-            } else
-                Snackbar.make(view.findViewById(R.id.container),
-                        getResources().getString(R.string.snackbar_title_empty),
-                        Snackbar.LENGTH_LONG).show();
-        } else {
+        } else
+            Snackbar.make(view.findViewById(R.id.container),
+                    getResources().getString(R.string.snackbar_title_empty),
+                    Snackbar.LENGTH_LONG).show();
+
+        if (!CommonUtils.isNetworkAvailable(getActivity().getApplicationContext()))
             Snackbar.make(view.findViewById(R.id.container),
                     getResources().getString(R.string.network_not_available),
                     Snackbar.LENGTH_LONG).show();
-        }
     }
 
     @Override
